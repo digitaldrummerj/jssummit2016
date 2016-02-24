@@ -1,0 +1,35 @@
+<ion-view enable-menu-with-back-views="true">
+  <ion-nav-title>Tasks For: {{vm.project.name}}
+  </ion-nav-title>
+  <ion-nav-buttons side="right">
+    <button class="button button-icon" ng-click="vm.showTaskModal()">
+      <i class="icon ion-compose"></i>
+    </button>
+  </ion-nav-buttons>
+  <ion-content>
+  
+    
+    <ion-refresher pulling-text="Pull to refresh" on-refresh="vm.doRefresh()"></ion-refresher>
+    <ion-list ng-if="vm.tasks.length > 0">
+      <ion-item class="item item-icon-right item-icon-left" ng-repeat=" task in vm.tasks | orderBy: ['completed','name']"
+      ng-class="{completedTask: task.completed}" type="item-text-wrap" >
+        <i class="icon" ng-class="task.completed ? 
+        'ion-checkmark-circled' : 
+        'ion-ios-circle-outline'" ng-click="vm.completeTask(task)">
+</i> {{task.name}}
+        <i class="icon ion-close icon-accessory" ng-click="vm.deleteTask(task)"></i>
+      </ion-item>
+    </ion-list>
+    <ion-infinite-scroll on-infinite="vm.getMoreTasks()" ng-if="vm.moreDataCanBeLoaded && vm.tasks.length > 0 && !vm.refreshing"
+    immediate-check="false"></ion-infinite-scroll>
+    
+    <div class="card" ng-if="vm.tasks.length == 0">
+      <div class="item item-text-wrap">
+        There are no tasks for this project.
+        <span class="item-text-center">
+        Click <button class="button button-small button-icon icon ion-compose" ng-click="vm.showTaskModal()"></button> to add a task
+      </span>
+      </div>
+      
+  </ion-content>
+</ion-view>
